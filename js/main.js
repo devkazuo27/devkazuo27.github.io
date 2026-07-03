@@ -36,14 +36,19 @@ copyBtn.addEventListener("click", async () => {
   setTimeout(() => (copyBtn.textContent = "[ copiar ]"), 1800);
 });
 
-// Header: se oculta al bajar, aparece al subir
+// Header (se oculta al bajar) + línea de progreso de lectura
 const header = document.getElementById("header");
+const progress = document.getElementById("scroll-progress");
 let lastY = window.scrollY;
-window.addEventListener("scroll", () => {
+function onScroll() {
   const y = window.scrollY;
   header.classList.toggle("is-hidden", y > lastY && y > 140);
   lastY = y;
-}, { passive: true });
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  progress.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+}
+window.addEventListener("scroll", onScroll, { passive: true });
+onScroll();
 
 /* ============ Preloader ============ */
 
