@@ -62,31 +62,15 @@ setTimeout(killPreloader, 5000);
 const seen = sessionStorage.getItem("nv-seen") === "1";
 try { sessionStorage.setItem("nv-seen", "1"); } catch {}
 
-/* ============ Scroll suave (Lenis) ============ */
+/* ============ Anclas internas (scroll nativo, siempre fiable) ============ */
 
-let lenis = null;
-if (typeof window.Lenis !== "undefined" && !reduceMotion) {
-  lenis = new Lenis({ lerp: 0.09 });
-  docEl.classList.add("has-lenis");
-  if (hasGsap) {
-    lenis.on("scroll", () => ScrollTrigger.update());
-    gsap.ticker.add((t) => lenis.raf(t * 1000));
-    gsap.ticker.lagSmoothing(0);
-  } else {
-    const raf = (time) => { lenis.raf(time); requestAnimationFrame(raf); };
-    requestAnimationFrame(raf);
-  }
-}
-
-// Anclas internas
 document.querySelectorAll('a[href^="#"]').forEach((a) => {
   a.addEventListener("click", (e) => {
     const id = a.getAttribute("href");
     const target = id.length > 1 && document.querySelector(id);
     if (!target) return;
     e.preventDefault();
-    if (lenis) lenis.scrollTo(target, { duration: 1.3 });
-    else target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
+    target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
     history.replaceState(null, "", id);
   });
 });
