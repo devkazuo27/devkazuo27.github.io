@@ -12,12 +12,13 @@ const animOK = hasGsap && !reduceMotion;
 
 /* ============ Utilidades básicas (siempre) ============ */
 
-// Reloj GMT-6 y año
-const clockEl = document.getElementById("clock");
+// Relojes GMT-6 y año
+const clockEls = document.querySelectorAll(".js-clock");
 function tick() {
-  clockEl.textContent = new Intl.DateTimeFormat("es-MX", {
+  const t = new Intl.DateTimeFormat("es-MX", {
     hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "America/Mexico_City",
   }).format(new Date());
+  clockEls.forEach((el) => (el.textContent = t));
 }
 tick();
 setInterval(tick, 30_000);
@@ -143,6 +144,67 @@ if (animOK) {
       .to(preloader, { yPercent: -100, duration: 0.85, ease: "power4.inOut" }, "+=0.15")
       .add(() => heroIntro(false), "<+=0.3")
       .add(killPreloader);
+  }
+
+  // --- Parallax de salida del hero ---
+  gsap.to(".hero-title", {
+    yPercent: -14, opacity: 0.35, ease: "none",
+    scrollTrigger: { trigger: ".hero", start: "bottom 92%", end: "bottom 30%", scrub: 0.5 },
+  });
+
+  // --- Manifiesto: las palabras se encienden con el scroll ---
+  const manifesto = document.getElementById("manifesto-text");
+  if (manifesto) {
+    const wrapWords = (node) => {
+      [...node.childNodes].forEach((child) => {
+        if (child.nodeType === Node.TEXT_NODE) {
+          const frag = document.createDocumentFragment();
+          child.textContent.split(/(\s+)/).forEach((part) => {
+            if (!part) return;
+            if (/^\s+$/.test(part)) {
+              frag.appendChild(document.createTextNode(" "));
+            } else {
+              const s = document.createElement("span");
+              s.className = "word";
+              s.textContent = part;
+              frag.appendChild(s);
+            }
+          });
+          child.replaceWith(frag);
+        } else if (child.nodeType === Node.ELEMENT_NODE) {
+          wrapWords(child);
+        }
+      });
+    };
+    wrapWords(manifesto);
+    gsap.fromTo(manifesto.querySelectorAll(".word"),
+      { opacity: 0.16 },
+      {
+        opacity: 1, stagger: 0.06, ease: "none",
+        scrollTrigger: { trigger: manifesto, start: "top 78%", end: "bottom 45%", scrub: 0.4 },
+      });
+  }
+
+  // --- Marquees: GSAP los mueve y reaccionan a la velocidad del scroll ---
+  const marqueeTweens = [];
+  document.querySelectorAll(".marquee-track").forEach((track) => {
+    track.style.animation = "none";
+    const rev = !!track.closest(".marquee-rev");
+    marqueeTweens.push(gsap.fromTo(track,
+      { xPercent: rev ? -50 : 0 },
+      { xPercent: rev ? 0 : -50, ease: "none", duration: 26, repeat: -1 }));
+  });
+  if (marqueeTweens.length) {
+    let boost = 0;
+    let lastScroll = window.scrollY;
+    window.addEventListener("scroll", () => {
+      boost = Math.min(6, boost + Math.abs(window.scrollY - lastScroll) / 60);
+      lastScroll = window.scrollY;
+    }, { passive: true });
+    gsap.ticker.add(() => {
+      boost += (0 - boost) * 0.06; // vuelve suave a velocidad normal
+      marqueeTweens.forEach((t) => t.timeScale(1 + boost));
+    });
   }
 
   // --- Reveals al hacer scroll ---
