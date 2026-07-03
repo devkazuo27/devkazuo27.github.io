@@ -70,6 +70,14 @@ sup { font-size: 0.55em; color: var(--violet); }
   outline-offset: 4px;
 }
 
+/* Iconos SVG inline */
+.icon {
+  width: 0.85em;
+  height: 0.85em;
+  display: inline-block;
+  vertical-align: -0.06em;
+}
+
 .mono {
   font-family: var(--font-mono);
   font-size: 12px;
@@ -384,6 +392,12 @@ html.js.pre-done .preloader { display: none; }
   color: var(--violet);
   padding: 0 0.5em;
 }
+.marquee-track i svg {
+  width: 0.62em;
+  height: 0.62em;
+  display: inline-block;
+  vertical-align: -0.02em;
+}
 @keyframes marquee {
   to { transform: translateX(-50%); }
 }
@@ -487,11 +501,15 @@ a.work-row:hover::before { opacity: 1; }
 
 .work-arrow {
   display: inline-block;
-  font-size: 0.6em;
   color: var(--violet);
   margin-left: 12px;
   transform: translate(0, 2px);
   transition: transform 0.35s var(--ease-out);
+}
+.work-arrow svg {
+  width: 0.52em;
+  height: 0.52em;
+  display: block;
 }
 a.work-row:hover .work-arrow { transform: translate(6px, -4px); }
 

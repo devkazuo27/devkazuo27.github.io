@@ -30,7 +30,7 @@ const copyBtn = document.getElementById("copy-mail");
 copyBtn.addEventListener("click", async () => {
   try {
     await navigator.clipboard.writeText("naren.sanchez.h@gmail.com");
-    copyBtn.textContent = "[ copiado ✓ ]";
+    copyBtn.textContent = "[ listo ]";
   } catch {
     copyBtn.textContent = "[ ctrl+c ]";
   }
@@ -269,7 +269,7 @@ if (animOK) {
       const interactive = e.target.closest("a, button");
       ring.classList.toggle("is-label", !!labelTarget);
       ring.classList.toggle("is-hover", !!interactive && !labelTarget);
-      ringLabel.textContent = labelTarget ? "VER ↗" : "";
+      ringLabel.textContent = labelTarget ? "VER" : "";
     });
   }
 
