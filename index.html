@@ -8,6 +8,7 @@
   <meta property="og:title" content="Naren Sánchez — Desarrollador de software">
   <meta property="og:description" content="Bots, automatizaciones y webs que generan resultados reales.">
   <meta property="og:type" content="website">
+  <script>document.documentElement.classList.add("js");</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Instrument+Serif:ital@1&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -16,17 +17,28 @@
 </head>
 <body>
 
+  <!-- Preloader (solo con JS; se retira solo pase lo que pase) -->
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <p class="pre-name mono">n.sánchez — portafolio ©2026</p>
+    <div class="pre-bar"><span class="pre-fill" id="pre-fill"></span></div>
+    <p class="pre-count" id="pre-count">0</p>
+  </div>
+
+  <!-- Cursor personalizado (solo desktop) -->
+  <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursor-ring" aria-hidden="true"><span id="cursor-label"></span></div>
+
   <div class="grain" aria-hidden="true"></div>
 
   <a class="skip-link" href="#trabajo">Saltar al contenido</a>
 
   <!-- ============ HEADER ============ -->
   <header class="site-header" id="header">
-    <a class="header-brand" href="#top">n.sánchez <span>©2026</span></a>
+    <a class="header-brand" href="#top" data-scramble>n.sánchez <span>©2026</span></a>
     <nav class="header-nav" aria-label="Navegación principal">
-      <a href="#trabajo">Trabajo<sup>4</sup></a>
-      <a href="#servicios">Servicios</a>
-      <a href="#contacto">Contacto</a>
+      <a href="#trabajo" data-scramble>Trabajo<sup>4</sup></a>
+      <a href="#servicios" data-scramble>Servicios</a>
+      <a href="#contacto" data-scramble>Contacto</a>
     </nav>
     <p class="header-meta"><span id="clock">--:--</span> GMT-6 · MX</p>
   </header>
@@ -36,16 +48,16 @@
     <!-- ============ HERO ============ -->
     <section class="hero">
       <p class="hero-kicker mask"><span class="mask-inner mono">Desarrollador de software — México</span></p>
-      <h1 class="hero-title" aria-label="Naren Sánchez">
-        <span class="mask"><span class="mask-inner">NAREN</span></span>
-        <span class="mask mask-indent"><span class="mask-inner">SÁNCHEZ<em class="tm">®</em></span></span>
+      <h1 class="hero-title">
+        <span class="mask"><span class="mask-inner" data-split>NAREN</span></span>
+        <span class="mask mask-indent"><span class="mask-inner" data-split>SÁNCHEZ</span></span>
       </h1>
       <div class="hero-foot">
         <p class="hero-tagline mask"><span class="mask-inner">Construyo <em>bots</em>, <em>automatizaciones</em> y <em>webs</em><br>que generan resultados reales — de la idea al deploy.</span></p>
         <div class="hero-side mask">
           <span class="mask-inner">
             <span class="avail"><span class="avail-dot" aria-hidden="true"></span>Disponible para proyectos</span>
-            <a class="hero-cta" href="#trabajo">Ver trabajo <span aria-hidden="true">↓</span></a>
+            <a class="hero-cta" href="#trabajo" data-magnetic>Ver trabajo <span aria-hidden="true">↓</span></a>
           </span>
         </div>
       </div>
@@ -62,13 +74,14 @@
     <section class="section" id="trabajo">
       <header class="section-head" data-reveal>
         <p class="mono section-index">(01)</p>
-        <h2>Trabajo<br>seleccionado</h2>
+        <h2 data-split-scroll>Trabajo<br>seleccionado</h2>
       </header>
 
-      <div class="work-list">
-        <a class="work-row" href="https://devkazuo27.github.io/bot-ofertas-web/" target="_blank" rel="noopener" data-reveal>
+      <div class="work-list" id="work-list">
+        <a class="work-row" href="https://devkazuo27.github.io/bot-ofertas-web/" target="_blank" rel="noopener" data-reveal data-preview="ofertas" data-cursor="ver">
           <p class="work-num mono">001</p>
           <div class="work-main">
+            <figure class="work-thumb"><img src="img/work-ofertas.png" alt="Landing del Bot de Ofertas" loading="lazy"></figure>
             <h3>Bot de Ofertas ML<span class="work-arrow" aria-hidden="true">↗</span></h3>
             <p class="work-desc">
               Producto comercial completo: detecta ofertas reales en MercadoLibre y las envía por
@@ -83,9 +96,10 @@
           </div>
         </a>
 
-        <div class="work-row" data-reveal>
+        <div class="work-row" data-reveal data-preview="vectorizer">
           <p class="work-num mono">002</p>
           <div class="work-main">
+            <figure class="work-thumb"><img src="img/work-vectorizer.png" alt="Interfaz de Vectorizer" loading="lazy"></figure>
             <h3>Vectorizer</h3>
             <p class="work-desc">
               Alternativa local a Vector Magic: convierte imágenes a SVG 100% en tu máquina con
@@ -99,9 +113,10 @@
           </div>
         </div>
 
-        <div class="work-row" data-reveal>
+        <div class="work-row" data-reveal data-preview="partido">
           <p class="work-num mono">003</p>
           <div class="work-main">
+            <figure class="work-thumb"><img src="img/work-partido.png" alt="Bot Partido en Vivo en Discord" loading="lazy"></figure>
             <h3>Partido en Vivo</h3>
             <p class="work-desc">
               Bot de Discord que sigue partidos de fútbol en tiempo real: marcador, goles y eventos
@@ -115,9 +130,10 @@
           </div>
         </div>
 
-        <a class="work-row" href="https://devkazuo27.github.io/Vanidosa/" target="_blank" rel="noopener" data-reveal>
+        <a class="work-row" href="https://devkazuo27.github.io/Vanidosa/" target="_blank" rel="noopener" data-reveal data-preview="vanidosa" data-cursor="ver">
           <p class="work-num mono">004</p>
           <div class="work-main">
+            <figure class="work-thumb"><img src="img/work-vanidosa.png" alt="Sitio web de Vanidosa" loading="lazy"></figure>
             <h3>Vanidosa<span class="work-arrow" aria-hidden="true">↗</span></h3>
             <p class="work-desc">
               Sitio web completo para un salón de belleza: catálogo de servicios, diseño responsivo
@@ -132,14 +148,22 @@
         </a>
       </div>
 
-      <p class="section-foot mono" data-reveal>Más experimentos → <a href="https://github.com/devkazuo27" target="_blank" rel="noopener">github.com/devkazuo27</a></p>
+      <!-- Preview flotante (desktop) -->
+      <div class="work-preview" id="work-preview" aria-hidden="true">
+        <img data-key="ofertas" src="img/work-ofertas.png" alt="">
+        <img data-key="vectorizer" src="img/work-vectorizer.png" alt="">
+        <img data-key="partido" src="img/work-partido.png" alt="">
+        <img data-key="vanidosa" src="img/work-vanidosa.png" alt="">
+      </div>
+
+      <p class="section-foot mono" data-reveal>Más experimentos → <a href="https://github.com/devkazuo27" target="_blank" rel="noopener" data-scramble>github.com/devkazuo27</a></p>
     </section>
 
     <!-- ============ SERVICIOS ============ -->
     <section class="section" id="servicios">
       <header class="section-head" data-reveal>
         <p class="mono section-index">(02)</p>
-        <h2>Servicios</h2>
+        <h2 data-split-scroll>Servicios</h2>
       </header>
 
       <div class="service-grid">
@@ -174,7 +198,7 @@
     <section class="section" id="stack">
       <header class="section-head" data-reveal>
         <p class="mono section-index">(03)</p>
-        <h2>Stack</h2>
+        <h2 data-split-scroll>Stack</h2>
       </header>
 
       <dl class="stack-table">
@@ -196,11 +220,11 @@
     <!-- ============ CONTACTO ============ -->
     <section class="section section-contact" id="contacto">
       <p class="mono section-index" data-reveal>(04) — Contacto</p>
-      <h2 class="contact-title" data-reveal>¿Trabajamos<br><em>juntos?</em></h2>
+      <h2 class="contact-title" data-split-scroll>¿Trabajamos<br><em>juntos?</em></h2>
       <p class="contact-sub" data-reveal>Un bot, una web, una herramienta — o un lugar en tu equipo.<br>Escríbeme y platicamos.</p>
       <div class="contact-mail" data-reveal>
-        <a class="mail-link" href="mailto:naren.sanchez.h@gmail.com">naren.sanchez.h@gmail.com</a>
-        <button class="mail-copy mono" type="button" id="copy-mail" aria-label="Copiar correo">[ copiar ]</button>
+        <a class="mail-link" href="mailto:naren.sanchez.h@gmail.com" data-magnetic>naren.sanchez.h@gmail.com</a>
+        <button class="mail-copy mono" type="button" id="copy-mail" data-magnetic aria-label="Copiar correo">[ copiar ]</button>
       </div>
     </section>
 
@@ -210,11 +234,15 @@
   <footer class="site-footer">
     <p class="mono">© <span id="year">2026</span> Naren Sánchez</p>
     <p class="mono footer-note">Hecho a mano — sin plantillas</p>
-    <a class="mono" href="https://github.com/devkazuo27" target="_blank" rel="noopener">GitHub ↗</a>
+    <div class="footer-links">
+      <a class="mono" href="https://github.com/devkazuo27" target="_blank" rel="noopener" data-scramble>GitHub ↗</a>
+      <a class="mono" href="#top" data-scramble>Volver arriba ↑</a>
+    </div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

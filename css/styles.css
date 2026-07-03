@@ -1,7 +1,8 @@
 /* ============================================================
-   Naren Sánchez — portafolio
-   Dirección: editorial oscuro. Tinta casi negra, texto marfil,
-   display Syne, acentos Instrument Serif itálica, labels mono.
+   Naren Sánchez — portafolio v3
+   Editorial oscuro: tinta casi negra, texto marfil, display Syne,
+   acentos Instrument Serif itálica, labels mono. Preloader, cursor
+   custom, previews flotantes; todo degrada bien sin JS.
    ============================================================ */
 
 :root {
@@ -27,6 +28,7 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
+html.has-lenis { scroll-behavior: auto; }
 
 body {
   margin: 0;
@@ -40,8 +42,9 @@ body {
 }
 
 h1, h2, h3 { margin: 0; font-weight: 700; }
-p, dl, dd { margin: 0; }
+p, dl, dd, figure { margin: 0; }
 a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
 sup { font-size: 0.55em; color: var(--violet); }
 
@@ -64,7 +67,7 @@ sup { font-size: 0.55em; color: var(--violet); }
   position: absolute;
   left: -9999px;
   top: 12px;
-  z-index: 200;
+  z-index: 400;
   background: var(--paper);
   color: var(--ink);
   padding: 8px 16px;
@@ -88,6 +91,94 @@ sup { font-size: 0.55em; color: var(--violet); }
   75% { transform: translate(-3%, -3%); }
   100% { transform: translate(2%, 2%); }
 }
+
+/* ============ Preloader ============ */
+.preloader {
+  display: none; /* solo existe con JS */
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: var(--ink);
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--pad);
+}
+html.js .preloader { display: flex; }
+html.js.pre-done .preloader { display: none; }
+
+.pre-name { color: var(--paper-dim); margin-bottom: 16px; }
+
+.pre-bar {
+  height: 1px;
+  background: var(--line);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.pre-fill {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--paper);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.pre-count {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(72px, 14vw, 200px);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  text-align: right;
+}
+
+/* ============ Cursor custom ============ */
+.cursor-dot, .cursor-ring {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 350;
+  pointer-events: none;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+@media (hover: hover) and (pointer: fine) {
+  html.js.cursor-on { cursor: none; }
+  html.js.cursor-on a, html.js.cursor-on button { cursor: none; }
+  html.js.cursor-on .cursor-dot,
+  html.js.cursor-on .cursor-ring { display: grid; }
+}
+
+.cursor-dot {
+  width: 7px; height: 7px;
+  background: var(--paper);
+}
+.cursor-ring {
+  width: 44px; height: 44px;
+  border: 1px solid rgba(240, 237, 230, 0.35);
+  place-items: center;
+  transition: width 0.3s var(--ease-out), height 0.3s var(--ease-out),
+              background 0.3s ease, border-color 0.3s ease;
+}
+.cursor-ring span {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.cursor-ring.is-hover {
+  width: 64px; height: 64px;
+  border-color: var(--violet);
+}
+.cursor-ring.is-label {
+  width: 84px; height: 84px;
+  background: var(--violet);
+  border-color: var(--violet);
+}
+.cursor-ring.is-label span { opacity: 1; }
 
 /* ============ Header ============ */
 .site-header {
@@ -156,22 +247,16 @@ sup { font-size: 0.55em; color: var(--violet); }
 .hero-title {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(40px, 10.6vw, 196px);
+  font-size: clamp(40px, 10vw, 190px);
   line-height: 0.92;
   letter-spacing: -0.03em;
   text-transform: uppercase;
 }
+.hero-title .mask { white-space: nowrap; }
 .mask-indent { padding-left: clamp(16px, 6vw, 120px); }
 
-.tm {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 0.22em;
-  vertical-align: super;
-  color: var(--violet);
-  letter-spacing: 0;
-  margin-left: 0.3em;
-}
+/* Chars de los splits */
+.char { display: inline-block; will-change: transform; }
 
 /* Máscaras para reveals */
 .mask { display: block; overflow: hidden; }
@@ -231,6 +316,7 @@ sup { font-size: 0.55em; color: var(--violet); }
 }
 
 .hero-cta {
+  display: inline-block;
   font-family: var(--font-mono);
   font-size: 13px;
   text-transform: uppercase;
@@ -249,6 +335,7 @@ sup { font-size: 0.55em; color: var(--violet); }
   border-block: 1px solid var(--line);
   padding: 14px 0;
 }
+.marquee:hover .marquee-track { animation-play-state: paused; }
 .marquee-track {
   display: flex;
   width: max-content;
@@ -308,7 +395,7 @@ sup { font-size: 0.55em; color: var(--violet); }
 .section-foot a:hover { color: var(--paper); }
 
 /* ============ Trabajo ============ */
-.work-list { border-top: 1px solid var(--line); }
+.work-list { border-top: 1px solid var(--line); position: relative; }
 
 .work-row {
   display: grid;
@@ -318,8 +405,11 @@ sup { font-size: 0.55em; color: var(--violet); }
   padding: clamp(28px, 4.5vh, 44px) 0;
   border-bottom: 1px solid var(--line);
   position: relative;
-  transition: padding-left 0.45s var(--ease-out);
+  transition: padding-left 0.45s var(--ease-out), opacity 0.35s ease;
 }
+/* al hacer hover en la lista, las filas no activas se atenúan */
+.work-list:hover .work-row:not(:hover) { opacity: 0.35; }
+
 a.work-row:hover { padding-left: 16px; }
 a.work-row::before {
   content: "";
@@ -376,6 +466,41 @@ a.work-row:hover .work-arrow { transform: translate(6px, -4px); }
   margin-bottom: 4px;
 }
 a .work-badge { border-color: rgba(139, 123, 255, 0.5); color: var(--violet); }
+
+/* Miniatura embebida (solo pantallas chicas) */
+.work-thumb {
+  display: none;
+  margin-bottom: 18px;
+  border: 1px solid var(--line-soft);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.work-thumb img { width: 100%; aspect-ratio: 8 / 5; object-fit: cover; object-position: top left; }
+
+/* Preview flotante (desktop, la mueve JS) */
+.work-preview {
+  position: fixed;
+  top: 0; left: 0;
+  width: min(400px, 30vw);
+  aspect-ratio: 8 / 5;
+  z-index: 80;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 8px;
+  opacity: 0;
+  visibility: hidden;
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.7);
+}
+.work-preview img {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: top left;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.work-preview img.on { opacity: 1; }
 
 /* ============ Servicios ============ */
 .service-grid {
@@ -452,6 +577,7 @@ a .work-badge { border-color: rgba(139, 123, 255, 0.5); color: var(--violet); }
 }
 
 .mail-link {
+  display: inline-block;
   font-family: var(--font-mono);
   font-size: clamp(15px, 2.4vw, 24px);
   letter-spacing: 0.02em;
@@ -471,6 +597,7 @@ a .work-badge { border-color: rgba(139, 123, 255, 0.5); color: var(--violet); }
 .mail-link:hover::after { background: var(--violet); transform: scaleX(0.35); }
 
 .mail-copy {
+  display: inline-block;
   color: var(--paper-faint);
   transition: color 0.25s ease;
   padding: 4px 0;
@@ -487,6 +614,7 @@ a .work-badge { border-color: rgba(139, 123, 255, 0.5); color: var(--violet); }
   border-top: 1px solid var(--line);
   color: var(--paper-faint);
 }
+.footer-links { display: flex; gap: 24px; }
 .site-footer a { transition: color 0.25s ease; }
 .site-footer a:hover { color: var(--paper); }
 
@@ -514,6 +642,9 @@ a .work-badge { border-color: rgba(139, 123, 255, 0.5); color: var(--violet); }
     padding-top: 14px;
   }
   .work-meta p:last-child { display: none; }
+  .work-thumb { display: block; }
+  .work-preview { display: none; }
+  .work-list:hover .work-row:not(:hover) { opacity: 1; }
 
   .service-grid { grid-template-columns: 1fr; }
   .service { border-right: 0; border-bottom: 1px solid var(--line-soft); padding-left: 0; }
@@ -536,4 +667,6 @@ a .work-badge { border-color: rgba(139, 123, 255, 0.5); color: var(--violet); }
 
   .work-row { gap: 16px; }
   .work-num { padding-top: 6px; }
+
+  .footer-links { gap: 16px; }
 }
